@@ -1,0 +1,11 @@
+C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\BankRestApi.exe
+C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\appsettings.Development.json
+C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\appsettings.json
+C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\aws-beanstalk-tools-defaults.json
+C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\BankRestApi.dll
+C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\BankRestApi.deps.json
+C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\BankRestApi.runtimeconfig.json
+C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\BankRestApi.pdb
+C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\Dapper.dll
+C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\Dapper.Contrib.dll
+C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\Npgsql.dll
