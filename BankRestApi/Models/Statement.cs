@@ -12,5 +12,7 @@ namespace BankRestApi.Models
         public String Description { get; set; }
 
         public double BalanceVariation { get; set; }
+
+        public double Balance { get; set; }
     }
 }
