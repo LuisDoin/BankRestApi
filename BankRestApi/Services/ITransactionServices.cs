@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BankRestApi.Services
 {
-    interface ITransactionServices
+    public interface ITransactionServices
     {
         public Account withdraw(String accountNumber, double amount);
     }
