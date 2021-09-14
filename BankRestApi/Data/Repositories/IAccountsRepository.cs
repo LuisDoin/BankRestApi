@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace BankRestApi.Data.Repositories
 {
-    interface IAccountsRepository
+    public interface IAccountsRepository
     {
-        public void update(String accountNumber, double amount); 
+        public double getBalance(String accountNumber);
+
+        public void updateBalance(String accountNumber, double amount); 
         
-        public Account get(String accountNumber);
+        
     }
 }

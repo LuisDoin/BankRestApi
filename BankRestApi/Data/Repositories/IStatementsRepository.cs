@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BankRestApi.Data.Repositories
 {
-    interface IStatementsRepository
+    public interface IStatementsRepository
     {
         public IEnumerable<Statement> get(String accountNumber);
     }

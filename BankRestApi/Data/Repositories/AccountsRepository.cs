@@ -17,12 +17,12 @@ namespace BankRestApi.Data.Repositories
             _session = session;
         }
 
-        public Account get(string accountNumber)
+        public double getBalance(string accountNumber)
         {
             return _session.Connection.QueryFirstOrDefault(SqlQueries.getBalance, new { accountNumber }, _session.Transaction);
         }
 
-        public void update(string accountNumber, double balance)
+        public void updateBalance(string accountNumber, double balance)
         {
             _session.Connection.Execute(SqlQueries.updateBalance, new { accountNumber, balance }, _session.Transaction);
         }
