@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -11,7 +12,7 @@ namespace BankRestApi.Data
 
         public DbSession()
         {
-            Connection = new SqlConnection(Settings.ConnectionString);
+            Connection = new NpgsqlConnection(Settings.ConnectionString);
             Connection.Open();
         }
 
