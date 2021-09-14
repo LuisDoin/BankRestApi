@@ -21,9 +21,10 @@ namespace BankRestApi.Controllers
         }
 
         [HttpPut("withdraw")]
-        public Account Put(String accountNumber, int amount)
+        public IActionResult Put(String accountNumber, int amount)
         {
-            return _transactionServices.withdraw(accountNumber, amount);
+            var result = _transactionServices.withdraw(accountNumber, amount);
+            return result != null ? Ok(result) : BadRequest();
 
         }
     }

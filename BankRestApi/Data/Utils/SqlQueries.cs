@@ -12,11 +12,11 @@ namespace BankRestApi.Data.Utils
                                                         Order by date desc 
                                                         Limit 5";
 
-        public static readonly String getBalance = @"Select balance from statements
+        public static readonly String getBalance = @"Select balance from accounts
                                                      Where account_number = @accountNumber";
 
         public static readonly String updateBalance = @"Update accounts
                                                         Set balance = @balance
-                                                        Where account_number = accountNumber";
+                                                        Where account_number = @accountNumber";
     }
 }
