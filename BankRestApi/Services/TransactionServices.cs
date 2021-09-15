@@ -4,6 +4,7 @@ using BankRestApi.Models;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace BankRestApi.Services
@@ -30,7 +31,7 @@ namespace BankRestApi.Services
         {
             _unitOfWork.BeginTransaction();
             var balance =_accountsRepository.getBalance(accountNumber);
-            var withdrawalFee =  Decimal.Parse(_config["WithdrawalFee"]);
+            var withdrawalFee =  Decimal.Parse(_config["WithdrawalFee"], CultureInfo.InvariantCulture);
 
             if (balance == null || balance < amount + withdrawalFee)
             {
@@ -44,8 +45,8 @@ namespace BankRestApi.Services
             var updatedBalance = (decimal)balance - (amount + withdrawalFee);
 
             _accountsRepository.updateBalance(accountNumber, updatedBalance);
-            _statementsRepository.save(accountNumber, DateTime.Now, "Withdrawal", -amount, updatedBalance + withdrawalFee);
-            _statementsRepository.save(accountNumber, DateTime.Now, "Withdrawal fee", -withdrawalFee, updatedBalance);
+            _statementsRepository.save(accountNumber, DateTime.UtcNow, "Withdrawal", -amount, updatedBalance + withdrawalFee);
+            _statementsRepository.save(accountNumber, DateTime.UtcNow, "Withdrawal fee", -withdrawalFee, updatedBalance);
             _unitOfWork.Commit();
 
             return new Account(accountNumber, updatedBalance);
@@ -72,12 +73,12 @@ namespace BankRestApi.Services
                 throw new InvalidOperationException("Inexistent account.");
             }
 
-            var depositPercentageFee = Decimal.Parse(_config["DepositPercentageFee"]);
+            var depositPercentageFee = Decimal.Parse(_config["DepositPercentageFee"], CultureInfo.InvariantCulture);
             var updatedBalance = (decimal)balance + amount - amount * depositPercentageFee;
 
             _accountsRepository.updateBalance(accountNumber, updatedBalance);
-            _statementsRepository.save(accountNumber, DateTime.Now, "Deposit", amount, updatedBalance + amount * depositPercentageFee);
-            _statementsRepository.save(accountNumber, DateTime.Now, "Deposit fee", -amount * depositPercentageFee, updatedBalance);
+            _statementsRepository.save(accountNumber, DateTime.UtcNow, "Deposit", amount, updatedBalance + amount * depositPercentageFee);
+            _statementsRepository.save(accountNumber, DateTime.UtcNow, "Deposit fee", -amount * depositPercentageFee, updatedBalance);
             _unitOfWork.Commit();
         }
 
@@ -86,7 +87,7 @@ namespace BankRestApi.Services
             _unitOfWork.BeginTransaction();
             var sourceBalance = _accountsRepository.getBalance(fromAccount);
             var destinationBalance = _accountsRepository.getBalance(toAccount);
-            var transferFee = Decimal.Parse(_config["TransferFee"]);
+            var transferFee = Decimal.Parse(_config["TransferFee"], CultureInfo.InvariantCulture);
 
             if (sourceBalance == null || destinationBalance == null || sourceBalance < amount + transferFee)
             {
@@ -105,9 +106,9 @@ namespace BankRestApi.Services
 
             _accountsRepository.updateBalance(fromAccount, sourceUpdatedBalance);
             _accountsRepository.updateBalance(toAccount, destinationUpdatedBalance);
-            _statementsRepository.save(fromAccount, DateTime.Now, "Transfer (to account " + toAccount + ")", -amount, sourceUpdatedBalance + transferFee);
-            _statementsRepository.save(fromAccount, DateTime.Now, "Transfer fee", -transferFee, sourceUpdatedBalance);
-            _statementsRepository.save(toAccount, DateTime.Now, "Transfer (from account " + fromAccount + ")", amount, destinationUpdatedBalance);
+            _statementsRepository.save(fromAccount, DateTime.UtcNow, "Transfer (to account " + toAccount + ")", -amount, sourceUpdatedBalance + transferFee);
+            _statementsRepository.save(fromAccount, DateTime.UtcNow, "Transfer fee", -transferFee, sourceUpdatedBalance);
+            _statementsRepository.save(toAccount, DateTime.UtcNow, "Transfer (from account " + fromAccount + ")", amount, destinationUpdatedBalance);
             _unitOfWork.Commit();
         }
     }
