@@ -23,6 +23,9 @@ namespace BankRestApi.Controllers
         [HttpPut("withdraw")]
         public IActionResult Withdraw(String accountNumber, int amount)
         {
+            if (amount <= 0)
+                return BadRequest();
+
             var result = _transactionServices.withdraw(accountNumber, amount);
             return result != null ? Ok(result) : BadRequest("Account inexistent or with insufficient funds.");
         }
