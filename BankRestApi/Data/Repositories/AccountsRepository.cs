@@ -17,9 +17,9 @@ namespace BankRestApi.Data.Repositories
             _session = session;
         }
 
-        public double getBalance(string accountNumber)
+        public double? getBalance(string accountNumber)
         {
-            return _session.Connection.QueryFirstOrDefault<double?>(SqlQueries.getBalance, new { accountNumber }, _session.Transaction) ?? 0;
+            return _session.Connection.QueryFirstOrDefault<double?>(SqlQueries.getBalance, new { accountNumber }, _session.Transaction);
         }
 
         public void updateBalance(string accountNumber, double balance)

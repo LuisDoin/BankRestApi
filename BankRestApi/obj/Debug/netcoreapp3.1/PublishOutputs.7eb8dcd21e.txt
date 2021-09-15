@@ -8,4 +8,14 @@ C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\BankRestApi.runtime
 C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\BankRestApi.pdb
 C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\Dapper.dll
 C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\Dapper.Contrib.dll
+C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\Microsoft.OpenApi.dll
 C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\Npgsql.dll
+C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\System.Data.SqlClient.dll
+C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\runtimes\win-arm64\native\sni.dll
+C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\runtimes\win-x64\native\sni.dll
+C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\runtimes\win-x86\native\sni.dll
+C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\luisd\AppData\Local\Temp\AWSDeploy.f70a1bcf\package\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll

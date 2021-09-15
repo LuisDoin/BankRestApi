@@ -1,8 +1,8 @@
-﻿using BankRestApi.Models;
-using BankRestApi.Services;
+﻿using BankRestApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 
 namespace BankRestApi.Controllers
 {
@@ -21,11 +21,17 @@ namespace BankRestApi.Controllers
         }
 
         [HttpPut("withdraw")]
-        public IActionResult Put(String accountNumber, int amount)
+        public IActionResult Withdraw(String accountNumber, int amount)
         {
             var result = _transactionServices.withdraw(accountNumber, amount);
-            return result != null ? Ok(result) : BadRequest();
+            return result != null ? Ok(result) : BadRequest("Account inexistent or with insufficient funds.");
+        }
 
+        [HttpGet("statement")]
+        public IActionResult GetStatement(String accountNumber)
+        {
+            var result = _transactionServices.getStatement(accountNumber);
+            return result.Any() ? Ok(result) : BadRequest("Inexistent account.");
         }
     }
 }

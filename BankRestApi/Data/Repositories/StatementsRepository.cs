@@ -3,8 +3,6 @@ using BankRestApi.Models;
 using Dapper;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BankRestApi.Data.Repositories
 {
@@ -17,9 +15,14 @@ namespace BankRestApi.Data.Repositories
             _session = session;
         }
 
-        public IEnumerable<Statement> get(String accountNumber)
+        public IEnumerable<StatementEntry> get(String accountNumber)
         {
-            return _session.Connection.Query<Statement>(SqlQueries.getStatements, new { accountNumber }, _session.Transaction);
+            return _session.Connection.Query<StatementEntry>(SqlQueries.getStatements, new { accountNumber });
+        }
+
+        public void save(string accountNumber, DateTime date, string description, double balanceVariation, double balance)
+        {
+            _session.Connection.Execute(SqlQueries.saveStatement, new { accountNumber, date, description, balanceVariation, balance }, _session.Transaction);
         }
     }
 }

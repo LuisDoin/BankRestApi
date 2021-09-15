@@ -8,7 +8,7 @@ namespace BankRestApi.Data.Repositories
 {
     public interface IAccountsRepository
     {
-        public double getBalance(String accountNumber);
+        public double? getBalance(String accountNumber);
 
         public void updateBalance(String accountNumber, double amount); 
         

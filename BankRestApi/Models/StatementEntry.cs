@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 
 namespace BankRestApi.Models
 {
-    public class Statement
+    public class StatementEntry
     {
+        public String AccountNumber { get; set; }
+
         public DateTime Date { get; set; }
 
         public String Description { get; set; }

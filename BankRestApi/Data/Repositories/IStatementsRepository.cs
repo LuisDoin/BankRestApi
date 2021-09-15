@@ -8,6 +8,8 @@ namespace BankRestApi.Data.Repositories
 {
     public interface IStatementsRepository
     {
-        public IEnumerable<Statement> get(String accountNumber);
+        public IEnumerable<StatementEntry> get(String accountNumber);
+
+        public void save(String accountNumber, DateTime date, String description, double balanceVariation, double balance);
     }
 }

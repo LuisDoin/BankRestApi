@@ -28,18 +28,24 @@ namespace BankRestApi.Services
             _unitOfWork.BeginTransaction();
             var balance =_accountsRepository.getBalance(accountNumber);
             
-            if(balance < amount)
+            if(balance == null || balance < amount)
             {
                 _unitOfWork.Rollback();
                 return null;
             }
 
-            var updatedBalance = balance - amount;
+            var updatedBalance = (double)balance - amount;
 
             _accountsRepository.updateBalance(accountNumber, updatedBalance);
+            _statementsRepository.save(accountNumber, DateTime.Now, "Withdraw", -amount, updatedBalance);
             _unitOfWork.Commit();
 
             return new Account(accountNumber, updatedBalance);
+        }
+
+        public IEnumerable<StatementEntry> getStatement(string accountNumber)
+        {
+            return _statementsRepository.get(accountNumber)?.OrderBy(s => s.Date);
         }
     }
 }

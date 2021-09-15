@@ -9,5 +9,7 @@ namespace BankRestApi.Services
     public interface ITransactionServices
     {
         public Account withdraw(String accountNumber, double amount);
+
+        public IEnumerable<StatementEntry> getStatement(String accountNumber);
     }
 }
