@@ -11,5 +11,7 @@ namespace BankRestApi.Services
         public Account withdraw(String accountNumber, double amount);
 
         public IEnumerable<StatementEntry> getStatement(String accountNumber);
+
+        public void deposit(String accountNumber, double amount);
     }
 }

@@ -31,20 +31,19 @@ namespace BankRestApi.Services
         {
             _unitOfWork.BeginTransaction();
             var balance =_accountsRepository.getBalance(accountNumber);
-            var withdrawalFee = Int32.Parse(_config["WithdrawalFee"]);
-
+            var withdrawalFee =  Double.Parse(_config["WithdrawalFee"]);
 
             if (balance == null || balance < amount + withdrawalFee)
             {
                 _unitOfWork.Rollback();
-                return null;
+                throw new InvalidOperationException();
             }
 
             var updatedBalance = (double)balance - (amount + withdrawalFee);
 
             _accountsRepository.updateBalance(accountNumber, updatedBalance);
             _statementsRepository.save(accountNumber, DateTime.Now, "Withdrawal", -amount, updatedBalance + withdrawalFee);
-            _statementsRepository.save(accountNumber, DateTime.Now, "WithdrawalFee", -withdrawalFee, updatedBalance);
+            _statementsRepository.save(accountNumber, DateTime.Now, "Withdrawal fee", -withdrawalFee, updatedBalance);
             _unitOfWork.Commit();
 
             return new Account(accountNumber, updatedBalance);
@@ -53,6 +52,26 @@ namespace BankRestApi.Services
         public IEnumerable<StatementEntry> getStatement(string accountNumber)
         {
             return _statementsRepository.get(accountNumber)?.OrderBy(s => s.Date);
+        }
+
+        public void deposit(string accountNumber, double amount)
+        {
+            _unitOfWork.BeginTransaction();
+            var balance = _accountsRepository.getBalance(accountNumber);
+
+            if (balance == null)
+            {
+                _unitOfWork.Rollback();
+                throw new InvalidOperationException();
+            }
+
+            var depositPercentageFee = Double.Parse(_config["DepositPercentageFee"]);
+            var updatedBalance = (double)balance + amount - amount * depositPercentageFee;
+
+            _accountsRepository.updateBalance(accountNumber, updatedBalance);
+            _statementsRepository.save(accountNumber, DateTime.Now, "Deposit", amount, updatedBalance + amount * depositPercentageFee);
+            _statementsRepository.save(accountNumber, DateTime.Now, "Deposit fee", amount * depositPercentageFee, updatedBalance);
+            _unitOfWork.Commit();
         }
     }
 }
