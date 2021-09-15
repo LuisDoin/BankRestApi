@@ -15,7 +15,7 @@ namespace BankRestApi.Data.Utils
                                                         From statements 
                                                         Where account_number = @accountNumber
                                                         Order by date desc 
-                                                        Limit 5";
+                                                        Limit 10";
 
         public static readonly String saveStatement = @"Insert into statements 
                                                         values (@accountNumber,

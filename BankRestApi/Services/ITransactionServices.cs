@@ -8,10 +8,12 @@ namespace BankRestApi.Services
 {
     public interface ITransactionServices
     {
-        public Account withdraw(String accountNumber, double amount);
+        public Account withdraw(String accountNumber, decimal amount);
 
         public IEnumerable<StatementEntry> getStatement(String accountNumber);
 
-        public void deposit(String accountNumber, double amount);
+        public void deposit(String accountNumber, decimal amount);
+
+        public void transfer(String fromAccount, String toAccount, decimal amount);
     }
 }

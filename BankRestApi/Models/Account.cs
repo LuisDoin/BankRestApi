@@ -7,7 +7,7 @@ namespace BankRestApi.Models
 {
     public class Account
     {
-        public Account(string accountNumber, double balance)
+        public Account(string accountNumber, decimal balance)
         {
             AccountNumber = accountNumber;
             Balance = balance;
@@ -15,6 +15,6 @@ namespace BankRestApi.Models
 
         public String AccountNumber { get; set; }
 
-        public double Balance { get; set; }
+        public decimal Balance { get; set; }
     }
 }

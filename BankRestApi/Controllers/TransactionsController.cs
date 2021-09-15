@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 
 namespace BankRestApi.Controllers
 {
@@ -21,18 +20,18 @@ namespace BankRestApi.Controllers
         }
 
         [HttpPut("withdraw")]
-        public IActionResult Withdraw(String accountNumber, int amount)
+        public IActionResult Withdraw(String accountNumber, decimal amount)
         {
-            if (accountNumber.Length == 0 || amount <= 0)
-                return BadRequest();
-
             try
             {
+                if (accountNumber == null || accountNumber.Length == 0 || amount <= 0)
+                    return BadRequest("Invalid parameters.");
+
                 return Ok(_transactionServices.withdraw(accountNumber, amount));
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException e)
             {
-                return BadRequest("Account inexistent or with insufficient funds.");
+                return BadRequest(e.Message);
             }
             catch (Exception e)
             {
@@ -42,21 +41,43 @@ namespace BankRestApi.Controllers
         }
 
         [HttpPut("deposit")]
-        public IActionResult Deposit(String accountNumber, double amount)
+        public IActionResult Deposit(String accountNumber, decimal amount)
         {
-            if (accountNumber.Length == 0 || amount <= 0)
-                return BadRequest();
-
             try
             {
+                if (accountNumber == null || accountNumber.Length == 0 || amount <= 0)
+                    return BadRequest("Invalid parameters.");
+
                 _transactionServices.deposit(accountNumber, amount);
-                return Ok(); 
+                return Ok();
             }
-            catch(InvalidOperationException e)
+            catch (InvalidOperationException e)
             {
-                return BadRequest("Inexistent account.");
+                return BadRequest(e.Message);
             }
-            catch(Exception e)
+            catch (Exception e)
+            {
+                _logger.LogError("Error message: " + e.Message + " StackTrace: " + e.StackTrace);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPut("transfer")]
+        public IActionResult Transfer(String fromAccount, String toAccount, decimal amount)
+        {
+            try
+            {
+                if (fromAccount == null || fromAccount.Length == 0 || toAccount == null || toAccount.Length == 0 || amount <= 0)
+                    return BadRequest("Invalid parameters.");
+
+                _transactionServices.transfer(fromAccount, toAccount, amount);
+                return Ok();
+            }
+            catch (InvalidOperationException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception e)
             {
                 _logger.LogError("Error message: " + e.Message + " StackTrace: " + e.StackTrace);
                 return StatusCode(500);
@@ -66,8 +87,22 @@ namespace BankRestApi.Controllers
         [HttpGet("statement")]
         public IActionResult GetStatement(String accountNumber)
         {
-            var result = _transactionServices.getStatement(accountNumber);
-            return result.Any() ? Ok(result) : BadRequest("Inexistent account.");
+            try
+            {
+                if (accountNumber == null || accountNumber.Length == 0)
+                    return BadRequest("Invalid parameters.");
+
+                return Ok(_transactionServices.getStatement(accountNumber));
+            }
+            catch (InvalidOperationException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error message: " + e.Message + " StackTrace: " + e.StackTrace);
+                return StatusCode(500);
+            }            
         }
     }
 }

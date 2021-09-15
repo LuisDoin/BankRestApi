@@ -20,7 +20,7 @@ namespace BankRestApi.Data.Repositories
             return _session.Connection.Query<StatementEntry>(SqlQueries.getStatements, new { accountNumber });
         }
 
-        public void save(string accountNumber, DateTime date, string description, double balanceVariation, double balance)
+        public void save(string accountNumber, DateTime date, string description, decimal balanceVariation, decimal balance)
         {
             _session.Connection.Execute(SqlQueries.saveStatement, new { accountNumber, date, description, balanceVariation, balance }, _session.Transaction);
         }
