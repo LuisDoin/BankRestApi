@@ -17,14 +17,14 @@ namespace BankRestApi.Data.Repositories
             _session = session;
         }
 
-        public decimal? getBalance(string accountNumber)
+        public async Task<decimal?> getBalance(string accountNumber)
         {
-            return _session.Connection.QueryFirstOrDefault<decimal?>(SqlQueries.getBalance, new { accountNumber }, _session.Transaction);
+            return await _session.Connection.QueryFirstOrDefaultAsync<decimal?>(SqlQueries.getBalance, new { accountNumber }, _session.Transaction);
         }
 
-        public void updateBalance(string accountNumber, decimal balance)
+        public async Task updateBalance(string accountNumber, decimal balance)
         {
-            _session.Connection.Execute(SqlQueries.updateBalance, new { accountNumber, balance }, _session.Transaction);
+            await _session.Connection.ExecuteAsync(SqlQueries.updateBalance, new { accountNumber, balance }, _session.Transaction);
         }
     }
 }

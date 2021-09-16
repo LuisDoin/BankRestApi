@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BankRestApi.Services
 {
@@ -27,10 +28,10 @@ namespace BankRestApi.Services
             _config = config;
         }
 
-        public Account withdraw(string accountNumber, decimal amount)
+        public async Task<Account> withdraw(string accountNumber, decimal amount)
         {
             _unitOfWork.BeginTransaction();
-            var balance =_accountsRepository.getBalance(accountNumber);
+            var balance = await _accountsRepository.getBalance(accountNumber);
             var withdrawalFee =  Decimal.Parse(_config["WithdrawalFee"], CultureInfo.InvariantCulture);
 
             if (balance == null || balance < amount + withdrawalFee)
@@ -44,17 +45,18 @@ namespace BankRestApi.Services
 
             var updatedBalance = (decimal)balance - (amount + withdrawalFee);
 
-            _accountsRepository.updateBalance(accountNumber, updatedBalance);
-            _statementsRepository.save(accountNumber, DateTime.UtcNow, "Withdrawal", -amount, updatedBalance + withdrawalFee);
-            _statementsRepository.save(accountNumber, DateTime.UtcNow, "Withdrawal fee", -withdrawalFee, updatedBalance);
+            await _accountsRepository.updateBalance(accountNumber, updatedBalance);
+            await _statementsRepository.save(accountNumber, DateTime.UtcNow, "Withdrawal", -amount, updatedBalance + withdrawalFee);
+            await _statementsRepository.save(accountNumber, DateTime.UtcNow, "Withdrawal fee", -withdrawalFee, updatedBalance);
             _unitOfWork.Commit();
 
             return new Account(accountNumber, updatedBalance);
         }
 
-        public IEnumerable<StatementEntry> getStatement(string accountNumber)
+        public async Task<IEnumerable<StatementEntry>> getStatement(string accountNumber)
         {
-            var result = _statementsRepository.get(accountNumber)?.OrderBy(s => s.Date);
+            var result = await _statementsRepository.get(accountNumber);
+            result?.OrderBy(s => s.Date);
 
             if (!result.Any())
                 throw new InvalidOperationException("Inexistent account.");
@@ -62,10 +64,10 @@ namespace BankRestApi.Services
             return result;
         }
 
-        public void deposit(string accountNumber, decimal amount)
+        public async Task deposit(string accountNumber, decimal amount)
         {
             _unitOfWork.BeginTransaction();
-            var balance = _accountsRepository.getBalance(accountNumber);
+            var balance = await _accountsRepository.getBalance(accountNumber);
 
             if (balance == null)
             {
@@ -76,17 +78,17 @@ namespace BankRestApi.Services
             var depositPercentageFee = Decimal.Parse(_config["DepositPercentageFee"], CultureInfo.InvariantCulture);
             var updatedBalance = (decimal)balance + amount - amount * depositPercentageFee;
 
-            _accountsRepository.updateBalance(accountNumber, updatedBalance);
-            _statementsRepository.save(accountNumber, DateTime.UtcNow, "Deposit", amount, updatedBalance + amount * depositPercentageFee);
-            _statementsRepository.save(accountNumber, DateTime.UtcNow, "Deposit fee", -amount * depositPercentageFee, updatedBalance);
+            await _accountsRepository.updateBalance(accountNumber, updatedBalance);
+            await _statementsRepository.save(accountNumber, DateTime.UtcNow, "Deposit", amount, updatedBalance + amount * depositPercentageFee);
+            await _statementsRepository.save(accountNumber, DateTime.UtcNow, "Deposit fee", -amount * depositPercentageFee, updatedBalance);
             _unitOfWork.Commit();
         }
 
-        public void transfer(string fromAccount, string toAccount, decimal amount)
+        public async Task transfer(string fromAccount, string toAccount, decimal amount)
         {
             _unitOfWork.BeginTransaction();
-            var sourceBalance = _accountsRepository.getBalance(fromAccount);
-            var destinationBalance = _accountsRepository.getBalance(toAccount);
+            var sourceBalance = await _accountsRepository.getBalance(fromAccount);
+            var destinationBalance = await _accountsRepository.getBalance(toAccount);
             var transferFee = Decimal.Parse(_config["TransferFee"], CultureInfo.InvariantCulture);
 
             if (sourceBalance == null || destinationBalance == null || sourceBalance < amount + transferFee)
@@ -104,11 +106,11 @@ namespace BankRestApi.Services
             var sourceUpdatedBalance = (decimal)sourceBalance - amount - transferFee; 
             var destinationUpdatedBalance = (decimal)destinationBalance + amount;
 
-            _accountsRepository.updateBalance(fromAccount, sourceUpdatedBalance);
-            _accountsRepository.updateBalance(toAccount, destinationUpdatedBalance);
-            _statementsRepository.save(fromAccount, DateTime.UtcNow, "Transfer (to account " + toAccount + ")", -amount, sourceUpdatedBalance + transferFee);
-            _statementsRepository.save(fromAccount, DateTime.UtcNow, "Transfer fee", -transferFee, sourceUpdatedBalance);
-            _statementsRepository.save(toAccount, DateTime.UtcNow, "Transfer (from account " + fromAccount + ")", amount, destinationUpdatedBalance);
+            await _accountsRepository.updateBalance(fromAccount, sourceUpdatedBalance);
+            await _accountsRepository.updateBalance(toAccount, destinationUpdatedBalance);
+            await _statementsRepository.save(fromAccount, DateTime.UtcNow, "Transfer (to account " + toAccount + ")", -amount, sourceUpdatedBalance + transferFee);
+            await _statementsRepository.save(fromAccount, DateTime.UtcNow, "Transfer fee", -transferFee, sourceUpdatedBalance);
+            await _statementsRepository.save(toAccount, DateTime.UtcNow, "Transfer (from account " + fromAccount + ")", amount, destinationUpdatedBalance);
             _unitOfWork.Commit();
         }
     }

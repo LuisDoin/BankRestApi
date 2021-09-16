@@ -11,7 +11,7 @@ namespace BankRestApi.Data
 
         public DbSession()
         {
-            Connection = new NpgsqlConnection(Settings.ConnectionString);
+            Connection = new NpgsqlConnection(Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING"));
             Connection.Open();
         }
 

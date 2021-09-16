@@ -1,7 +1,11 @@
-﻿using BankRestApi.Services;
+﻿using BankRestApi.Data.Repositories;
+using BankRestApi.Models;
+using BankRestApi.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
 
 namespace BankRestApi.Controllers
 {
@@ -10,24 +14,50 @@ namespace BankRestApi.Controllers
     public class TransactionsController : Controller
     {
         private readonly ITransactionServices _transactionServices;
+        private readonly ITokenServices _tokenServices;
         private readonly ILogger<TransactionsController> _logger;
 
         public TransactionsController(ITransactionServices transactionServices,
-                                      ILogger<TransactionsController> logger)
-        { 
+                                      ILogger<TransactionsController> logger,
+                                      ITokenServices tokenServices)
+        {
             _transactionServices = transactionServices;
             _logger = logger;
+            _tokenServices = tokenServices;
+        }
+
+        [HttpPost]
+        [Route("login")]
+        public async Task<ActionResult<dynamic>> Authenticate([FromBody] User user)
+        {
+            try
+            {
+                var token = await _tokenServices.generateToken(user);
+                user.Password = "";
+
+                return new { user, token };
+            }
+            catch (InvalidOperationException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error message: " + e.Message + " StackTrace: " + e.StackTrace);
+                return StatusCode(500);
+            }            
         }
 
         [HttpPut("withdraw")]
-        public IActionResult Withdraw(string accountNumber, decimal amount)
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "tier2")]
+        public async Task<IActionResult> Withdraw(string accountNumber, decimal amount)
         {
             try
             {
                 if (accountNumber == null || accountNumber.Length == 0 || amount <= 0)
                     return BadRequest("Invalid parameters.");
 
-                return Ok(_transactionServices.withdraw(accountNumber, amount));
+                return Ok(await _transactionServices.withdraw(accountNumber, amount));
             }
             catch (InvalidOperationException e)
             {
@@ -41,14 +71,15 @@ namespace BankRestApi.Controllers
         }
 
         [HttpPut("deposit")]
-        public IActionResult Deposit(string accountNumber, decimal amount)
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "tier2")]
+        public async Task<IActionResult> Deposit(string accountNumber, decimal amount)
         {
             try
             {
                 if (accountNumber == null || accountNumber.Length == 0 || amount <= 0)
                     return BadRequest("Invalid parameters.");
 
-                _transactionServices.deposit(accountNumber, amount);
+                await _transactionServices.deposit(accountNumber, amount);
                 return Ok();
             }
             catch (InvalidOperationException e)
@@ -63,14 +94,15 @@ namespace BankRestApi.Controllers
         }
 
         [HttpPut("transfer")]
-        public IActionResult Transfer(string fromAccount, string toAccount, decimal amount)
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "tier2")]
+        public async Task<IActionResult> Transfer(string fromAccount, string toAccount, decimal amount)
         {
             try
             {
                 if (fromAccount == null || fromAccount.Length == 0 || toAccount == null || toAccount.Length == 0 || amount <= 0)
                     return BadRequest("Invalid parameters.");
 
-                _transactionServices.transfer(fromAccount, toAccount, amount);
+                await _transactionServices.transfer(fromAccount, toAccount, amount);
                 return Ok();
             }
             catch (InvalidOperationException e)
@@ -85,14 +117,15 @@ namespace BankRestApi.Controllers
         }
 
         [HttpGet("statement")]
-        public IActionResult GetStatement(string accountNumber)
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "tier1,tier2")]
+        public async Task<IActionResult> GetStatement(string accountNumber)
         {
             try
             {
                 if (accountNumber == null || accountNumber.Length == 0)
                     return BadRequest("Invalid parameters.");
 
-                return Ok(_transactionServices.getStatement(accountNumber));
+                return Ok(await _transactionServices.getStatement(accountNumber));
             }
             catch (InvalidOperationException e)
             {
