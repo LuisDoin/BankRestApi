@@ -15,7 +15,7 @@ namespace BankRestApi.Data.Repositories
             _session = session;
         }
 
-        public IEnumerable<StatementEntry> get(String accountNumber)
+        public IEnumerable<StatementEntry> get(string accountNumber)
         {
             return _session.Connection.Query<StatementEntry>(SqlQueries.getStatements, new { accountNumber });
         }

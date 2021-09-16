@@ -20,7 +20,7 @@ namespace BankRestApi.Controllers
         }
 
         [HttpPut("withdraw")]
-        public IActionResult Withdraw(String accountNumber, decimal amount)
+        public IActionResult Withdraw(string accountNumber, decimal amount)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace BankRestApi.Controllers
         }
 
         [HttpPut("deposit")]
-        public IActionResult Deposit(String accountNumber, decimal amount)
+        public IActionResult Deposit(string accountNumber, decimal amount)
         {
             try
             {
@@ -63,7 +63,7 @@ namespace BankRestApi.Controllers
         }
 
         [HttpPut("transfer")]
-        public IActionResult Transfer(String fromAccount, String toAccount, decimal amount)
+        public IActionResult Transfer(string fromAccount, string toAccount, decimal amount)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace BankRestApi.Controllers
         }
 
         [HttpGet("statement")]
-        public IActionResult GetStatement(String accountNumber)
+        public IActionResult GetStatement(string accountNumber)
         {
             try
             {

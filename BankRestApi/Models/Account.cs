@@ -13,7 +13,7 @@ namespace BankRestApi.Models
             Balance = balance;
         }
 
-        public String AccountNumber { get; set; }
+        public string AccountNumber { get; set; }
 
         public decimal Balance { get; set; }
     }

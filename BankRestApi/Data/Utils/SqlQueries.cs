@@ -7,7 +7,13 @@ namespace BankRestApi.Data.Utils
 {
     public static class SqlQueries
     {
-        public static readonly String getStatements = @"Select account_number as AccountNumber,
+        public static readonly string getUser = @"Select *
+                                                From users 
+                                                Where   
+                                                    login = @login and
+                                                    password = @password";
+
+        public static readonly string getStatements = @"Select account_number as AccountNumber,
                                                                date as Date,
                                                                description as Description,
                                                                balance_variation as BalanceVariation,
@@ -17,17 +23,17 @@ namespace BankRestApi.Data.Utils
                                                         Order by date desc 
                                                         Limit 10";
 
-        public static readonly String saveStatement = @"Insert into statements 
+        public static readonly string saveStatement = @"Insert into statements 
                                                         values (@accountNumber,
                                                                 @date,
                                                                 @description,
                                                                 @balanceVariation,
                                                                 @balance)";
 
-        public static readonly String getBalance = @"Select balance from accounts
+        public static readonly string getBalance = @"Select balance from accounts
                                                      Where account_number = @accountNumber";
 
-        public static readonly String updateBalance = @"Update accounts
+        public static readonly string updateBalance = @"Update accounts
                                                         Set balance = @balance
                                                         Where account_number = @accountNumber";
     }

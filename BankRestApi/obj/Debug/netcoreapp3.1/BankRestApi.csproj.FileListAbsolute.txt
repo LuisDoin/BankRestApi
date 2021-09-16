@@ -33,3 +33,11 @@ C:\Users\luisd\source\repos\BankRestApi\BankRestApi\bin\Debug\netcoreapp3.1\runt
 C:\Users\luisd\source\repos\BankRestApi\BankRestApi\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\luisd\source\repos\BankRestApi\BankRestApi\obj\Debug\netcoreapp3.1\BankRestApi.csproj.CopyComplete
 C:\Users\luisd\source\repos\BankRestApi\BankRestApi\obj\Debug\netcoreapp3.1\BankRestApi.genruntimeconfig.cache
+C:\Users\luisd\source\repos\BankRestApi\BankRestApi\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\luisd\source\repos\BankRestApi\BankRestApi\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\luisd\source\repos\BankRestApi\BankRestApi\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Logging.dll
+C:\Users\luisd\source\repos\BankRestApi\BankRestApi\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.dll
+C:\Users\luisd\source\repos\BankRestApi\BankRestApi\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\luisd\source\repos\BankRestApi\BankRestApi\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Tokens.dll
+C:\Users\luisd\source\repos\BankRestApi\BankRestApi\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+C:\Users\luisd\source\repos\BankRestApi\BankRestApi\bin\Debug\netcoreapp3.1\System.IdentityModel.Tokens.Jwt.dll

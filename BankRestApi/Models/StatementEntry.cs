@@ -7,11 +7,11 @@ namespace BankRestApi.Models
 {
     public class StatementEntry
     {
-        public String AccountNumber { get; set; }
+        public string AccountNumber { get; set; }
 
         public DateTime Date { get; set; }
 
-        public String Description { get; set; }
+        public string Description { get; set; }
 
         public double BalanceVariation { get; set; }
 

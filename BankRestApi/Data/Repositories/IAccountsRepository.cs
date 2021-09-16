@@ -8,9 +8,9 @@ namespace BankRestApi.Data.Repositories
 {
     public interface IAccountsRepository
     {
-        public decimal? getBalance(String accountNumber);
+        public decimal? getBalance(string accountNumber);
 
-        public void updateBalance(String accountNumber, decimal amount); 
+        public void updateBalance(string accountNumber, decimal amount); 
         
         
     }

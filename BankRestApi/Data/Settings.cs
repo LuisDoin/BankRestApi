@@ -7,6 +7,6 @@ namespace BankRestApi.Data
 {
     public static class Settings
     {
-        public static string ConnectionString = Environment.GetEnvironmentVariable("dbConnection");
+        public static string ConnectionString = Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING");
     }
 }
