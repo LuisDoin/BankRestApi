@@ -16,12 +16,12 @@ namespace BankRestApi.Data.Repositories
             _session = session;
         }
 
-        public async Task<IEnumerable<StatementEntry>> get(string accountNumber)
+        public async Task<IEnumerable<StatementEntry>> Get(string accountNumber)
         {
             return await _session.Connection.QueryAsync<StatementEntry>(SqlQueries.getStatements, new { accountNumber });
         }
 
-        public async Task save(string accountNumber, DateTime date, string description, decimal balanceVariation, decimal balance)
+        public async Task Save(string accountNumber, DateTime date, string description, decimal balanceVariation, decimal balance)
         {
             await _session.Connection.ExecuteAsync(SqlQueries.saveStatement, new { accountNumber, date, description, balanceVariation, balance }, _session.Transaction);
         }

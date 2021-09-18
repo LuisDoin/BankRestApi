@@ -14,7 +14,7 @@ namespace BankRestApi.Data.Repositories
             _session = session;
         }
 
-        public async Task<User> get(string login, string password)
+        public async Task<User> Get(string login, string password)
         {
             return await _session.Connection.QueryFirstOrDefaultAsync<User>(SqlQueries.getUser, new { login, password });
         }

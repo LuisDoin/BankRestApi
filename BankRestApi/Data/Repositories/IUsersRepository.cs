@@ -8,6 +8,6 @@ namespace BankRestApi.Data.Repositories
 {
     public interface IUsersRepository
     {
-        public Task<User> get(string login, string password);
+        public Task<User> Get(string login, string password);
     }
 }

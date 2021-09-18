@@ -20,9 +20,9 @@ namespace BankRestApi.Services
             _usersRepository = usersRepository;
         }
 
-        public async Task<string> generateToken(User candidateUser) 
+        public async Task<string> GenerateToken(User candidateUser) 
         {
-            var user = await _usersRepository.get(candidateUser.Login, candidateUser.Password);
+            var user = await _usersRepository.Get(candidateUser.Login, candidateUser.Password);
 
             if (user == null)
                 throw new InvalidOperationException("Invalid user or password.");

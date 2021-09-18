@@ -32,7 +32,7 @@ namespace BankRestApi.Controllers
         {
             try
             {
-                var token = await _tokenServices.generateToken(user);
+                var token = await _tokenServices.GenerateToken(user);
                 user.Password = "";
 
                 return new { user, token };
@@ -57,7 +57,7 @@ namespace BankRestApi.Controllers
                 if (accountNumber == null || accountNumber.Length == 0 || amount <= 0)
                     return BadRequest("Invalid parameters.");
 
-                return Ok(await _transactionServices.withdraw(accountNumber, amount));
+                return Ok(await _transactionServices.Withdraw(accountNumber, amount));
             }
             catch (InvalidOperationException e)
             {
@@ -79,7 +79,7 @@ namespace BankRestApi.Controllers
                 if (accountNumber == null || accountNumber.Length == 0 || amount <= 0)
                     return BadRequest("Invalid parameters.");
 
-                await _transactionServices.deposit(accountNumber, amount);
+                await _transactionServices.Deposit(accountNumber, amount);
                 return Ok();
             }
             catch (InvalidOperationException e)
@@ -102,7 +102,7 @@ namespace BankRestApi.Controllers
                 if (fromAccount == null || fromAccount.Length == 0 || toAccount == null || toAccount.Length == 0 || amount <= 0)
                     return BadRequest("Invalid parameters.");
 
-                await _transactionServices.transfer(fromAccount, toAccount, amount);
+                await _transactionServices.Transfer(fromAccount, toAccount, amount);
                 return Ok();
             }
             catch (InvalidOperationException e)
@@ -125,7 +125,7 @@ namespace BankRestApi.Controllers
                 if (accountNumber == null || accountNumber.Length == 0)
                     return BadRequest("Invalid parameters.");
 
-                return Ok(await _transactionServices.getStatement(accountNumber));
+                return Ok(await _transactionServices.GetStatement(accountNumber));
             }
             catch (InvalidOperationException e)
             {
