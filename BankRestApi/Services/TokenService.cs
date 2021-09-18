@@ -3,19 +3,18 @@ using BankRestApi.Models;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace BankRestApi.Services
 {
-    public class TokenServices : ITokenServices
+    public class TokenService : ITokenService
     {
 
         private readonly IUsersRepository _usersRepository;
 
-        public TokenServices(IUsersRepository usersRepository)
+        public TokenService(IUsersRepository usersRepository)
         {
             _usersRepository = usersRepository;
         }

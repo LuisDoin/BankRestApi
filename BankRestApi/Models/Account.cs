@@ -7,6 +7,8 @@ namespace BankRestApi.Models
 {
     public class Account
     {
+        public Account(){}
+
         public Account(string accountNumber, decimal balance)
         {
             AccountNumber = accountNumber;

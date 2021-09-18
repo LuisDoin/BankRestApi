@@ -15,8 +15,9 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
+        "WITHDRAWAL_FEE": "4",
         "POSTGRES_CONNECTION_STRING": "Server = bankdb.cyjqwbjszuvs.us-east-1.rds.amazonaws.com; Port = 5432; Database = postgres; User Id = postgres; Password = bankdb1234;",
-        "JWT_SECRET" : "qweasdzxcpoilkjmnbyhnmju1029384675"
+        "JWT_SECRET": "qweasdzxcpoilkjmnbyhnmju1029384675"
       }
     },
     "BankRestApi": {
@@ -26,6 +27,7 @@
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
+        "WITHDRAWAL_FEE": "4",
         "POSTGRES_CONNECTION_STRING": "Server = bankdb.cyjqwbjszuvs.us-east-1.rds.amazonaws.com; Port = 5432; Database = postgres; User Id = postgres; Password = bankdb1234;",
         "JWT_SECRET": "qweasdzxcpoilkjmnbyhnmju1029384675"
 

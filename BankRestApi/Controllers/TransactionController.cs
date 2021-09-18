@@ -11,15 +11,15 @@ namespace BankRestApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class TransactionsController : Controller
+    public class TransactionController : Controller
     {
-        private readonly ITransactionServices _transactionServices;
-        private readonly ITokenServices _tokenServices;
-        private readonly ILogger<TransactionsController> _logger;
+        private readonly ITransactionService _transactionServices;
+        private readonly ITokenService _tokenServices;
+        private readonly ILogger<TransactionController> _logger;
 
-        public TransactionsController(ITransactionServices transactionServices,
-                                      ILogger<TransactionsController> logger,
-                                      ITokenServices tokenServices)
+        public TransactionController(ITransactionService transactionServices,
+                                      ILogger<TransactionController> logger,
+                                      ITokenService tokenServices)
         {
             _transactionServices = transactionServices;
             _logger = logger;
@@ -35,15 +35,15 @@ namespace BankRestApi.Controllers
                 var token = await _tokenServices.GenerateToken(user);
                 user.Password = "";
 
-                return new { user, token };
+                return Ok(new { user, token });
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException ex)
             {
-                return BadRequest(e.Message);
+                return BadRequest(ex.Message);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                _logger.LogError("Error message: " + e.Message + " StackTrace: " + e.StackTrace);
+                _logger.LogError("Error message: " + ex.Message + " StackTrace: " + ex.StackTrace);
                 return StatusCode(500);
             }            
         }
@@ -54,18 +54,15 @@ namespace BankRestApi.Controllers
         {
             try
             {
-                if (accountNumber == null || accountNumber.Length == 0 || amount <= 0)
-                    return BadRequest("Invalid parameters.");
-
                 return Ok(await _transactionServices.Withdraw(accountNumber, amount));
             }
-            catch (InvalidOperationException e)
+            catch (Exception ex) when (ex is ArgumentException || ex is InvalidOperationException)
             {
-                return BadRequest(e.Message);
+                return BadRequest(ex.Message);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                _logger.LogError("Error message: " + e.Message + " StackTrace: " + e.StackTrace);
+                _logger.LogError("Error message: " + ex.Message + " StackTrace: " + ex.StackTrace);
                 return StatusCode(500);
             } 
         }
@@ -76,19 +73,16 @@ namespace BankRestApi.Controllers
         {
             try
             {
-                if (accountNumber == null || accountNumber.Length == 0 || amount <= 0)
-                    return BadRequest("Invalid parameters.");
-
                 await _transactionServices.Deposit(accountNumber, amount);
                 return Ok();
             }
-            catch (InvalidOperationException e)
+            catch (Exception ex) when (ex is ArgumentException || ex is InvalidOperationException)
             {
-                return BadRequest(e.Message);
+                return BadRequest(ex.Message);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                _logger.LogError("Error message: " + e.Message + " StackTrace: " + e.StackTrace);
+                _logger.LogError("Error message: " + ex.Message + " StackTrace: " + ex.StackTrace);
                 return StatusCode(500);
             }
         }
@@ -99,19 +93,16 @@ namespace BankRestApi.Controllers
         {
             try
             {
-                if (fromAccount == null || fromAccount.Length == 0 || toAccount == null || toAccount.Length == 0 || amount <= 0)
-                    return BadRequest("Invalid parameters.");
-
                 await _transactionServices.Transfer(fromAccount, toAccount, amount);
                 return Ok();
             }
-            catch (InvalidOperationException e)
+            catch (Exception ex) when (ex is ArgumentException || ex is InvalidOperationException)
             {
-                return BadRequest(e.Message);
+                return BadRequest(ex.Message);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                _logger.LogError("Error message: " + e.Message + " StackTrace: " + e.StackTrace);
+                _logger.LogError("Error message: " + ex.Message + " StackTrace: " + ex.StackTrace);
                 return StatusCode(500);
             }
         }
@@ -122,20 +113,32 @@ namespace BankRestApi.Controllers
         {
             try
             {
-                if (accountNumber == null || accountNumber.Length == 0)
-                    return BadRequest("Invalid parameters.");
-
                 return Ok(await _transactionServices.GetStatement(accountNumber));
             }
-            catch (InvalidOperationException e)
+            catch (Exception ex) when (ex is ArgumentException || ex is InvalidOperationException)
             {
-                return BadRequest(e.Message);
+                return BadRequest(ex.Message);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                _logger.LogError("Error message: " + e.Message + " StackTrace: " + e.StackTrace);
+                _logger.LogError("Error message: " + ex.Message + " StackTrace: " + ex.StackTrace);
                 return StatusCode(500);
-            }            
+            }
+        }
+
+        [HttpGet("accounts")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "tier1,tier2")]
+        public async Task<IActionResult> GetAccount()
+        {
+            try
+            {
+                return Ok(await _transactionServices.GetAccounts());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error message: " + ex.Message + " StackTrace: " + ex.StackTrace);
+                return StatusCode(500);
+            }
         }
     }
 }

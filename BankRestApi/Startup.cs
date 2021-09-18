@@ -62,9 +62,9 @@ namespace BankRestApi
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IAccountsRepository, AccountsRepository>();
             services.AddTransient<IStatementsRepository, StatementsRepository>();
-            services.AddTransient<ITransactionServices, TransactionServices>();
+            services.AddTransient<ITransactionService, TransactionService>();
             services.AddTransient<IUsersRepository, UserRepository>();
-            services.AddTransient<ITokenServices, TokenServices>();
+            services.AddTransient<ITokenService, TokenService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace BankRestApi.Services
 {
-    public interface ITransactionServices
+    public interface ITransactionService
     {
         public Task<Account> Withdraw(string accountNumber, decimal amount);
 
         public Task<IEnumerable<StatementEntry>> GetStatement(string accountNumber);
+
+        public Task<IEnumerable<Account>> GetAccounts();
 
         public Task Deposit(string accountNumber, decimal amount);
 

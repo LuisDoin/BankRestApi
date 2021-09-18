@@ -17,6 +17,12 @@ namespace BankRestApi.Data.Repositories
             _session = session;
         }
 
+        public async Task<IEnumerable<Account>> GetAccounts()
+        {
+            return await _session.Connection.QueryAsync<Account>(SqlQueries.getAccounts);
+
+        }
+
         public async Task<decimal?> GetBalance(string accountNumber)
         {
             return await _session.Connection.QueryFirstOrDefaultAsync<decimal?>(SqlQueries.getBalance, new { accountNumber }, _session.Transaction);

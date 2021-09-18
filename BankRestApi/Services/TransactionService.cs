@@ -4,20 +4,21 @@ using BankRestApi.Models;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BankRestApi.Services
 {
-    public class TransactionServices : ITransactionServices
+    public class TransactionService : ITransactionService
     {
         private readonly IAccountsRepository _accountsRepository;
         private readonly IStatementsRepository _statementsRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _config;
 
-        public TransactionServices(IAccountsRepository accountsRepository,
+        public TransactionService(IAccountsRepository accountsRepository,
                                     IStatementsRepository statementsRepository,
                                     IUnitOfWork unitOfWork,
                                     IConfiguration config)
@@ -30,9 +31,14 @@ namespace BankRestApi.Services
 
         public async Task<Account> Withdraw(string accountNumber, decimal amount)
         {
+          if (string.IsNullOrEmpty(accountNumber))
+              throw new ArgumentException("Account number cannot be null or empty.", nameof(accountNumber));
+          if (amount <= 0)
+              throw new ArgumentException("Amount must be greater than zero", nameof(amount));
+            
             _unitOfWork.BeginTransaction();
             var balance = await _accountsRepository.GetBalance(accountNumber);
-            var withdrawalFee =  Decimal.Parse(_config["WithdrawalFee"], CultureInfo.InvariantCulture);
+            var withdrawalFee = Decimal.Parse(_config.GetSection("WithdrawalFee").Value, CultureInfo.InvariantCulture); 
 
             if (balance == null || balance < amount + withdrawalFee)
             {
@@ -41,7 +47,7 @@ namespace BankRestApi.Services
                     throw new InvalidOperationException("Inexistent account.");
                 else
                     throw new InvalidOperationException("insufficient funds.");
-            }
+            }  
 
             var updatedBalance = (decimal)balance - (amount + withdrawalFee);
 
@@ -53,18 +59,13 @@ namespace BankRestApi.Services
             return new Account(accountNumber, updatedBalance);
         }
 
-        public async Task<IEnumerable<StatementEntry>> GetStatement(string accountNumber)
-        {
-            var result = (await _statementsRepository.Get(accountNumber))?.OrderBy(s => s.Date);
-
-            if (!result.Any())
-                throw new InvalidOperationException("Inexistent account.");
-
-            return result;
-        }
-
         public async Task Deposit(string accountNumber, decimal amount)
         {
+            if (string.IsNullOrEmpty(accountNumber))
+                throw new ArgumentException("Account number cannot be null or empty.", nameof(accountNumber));
+            if (amount <= 0)
+                throw new ArgumentException("Amount must be greater than zero", nameof(amount));
+
             _unitOfWork.BeginTransaction();
             var balance = await _accountsRepository.GetBalance(accountNumber);
 
@@ -74,7 +75,7 @@ namespace BankRestApi.Services
                 throw new InvalidOperationException("Inexistent account.");
             }
 
-            var depositPercentageFee = Decimal.Parse(_config["DepositPercentageFee"], CultureInfo.InvariantCulture);
+            var depositPercentageFee = Decimal.Parse(_config.GetSection("DepositPercentageFee").Value, CultureInfo.InvariantCulture);
             var updatedBalance = (decimal)balance + amount - amount * depositPercentageFee;
 
             await _accountsRepository.UpdateBalance(accountNumber, updatedBalance);
@@ -85,10 +86,17 @@ namespace BankRestApi.Services
 
         public async Task Transfer(string fromAccount, string toAccount, decimal amount)
         {
+            if (string.IsNullOrEmpty(fromAccount))
+                throw new ArgumentException("Account number cannot be null or empty.", nameof(fromAccount)); 
+            if (string.IsNullOrEmpty(toAccount))
+                throw new ArgumentException("Account number cannot be null or empty.", nameof(toAccount));
+            if (amount <= 0)
+                throw new ArgumentException("Amount must be greater than zero", nameof(amount));
+
             _unitOfWork.BeginTransaction();
             var sourceBalance = await _accountsRepository.GetBalance(fromAccount);
             var destinationBalance = await _accountsRepository.GetBalance(toAccount);
-            var transferFee = Decimal.Parse(_config["TransferFee"], CultureInfo.InvariantCulture);
+            var transferFee = Decimal.Parse(_config.GetSection("TransferFee").Value, CultureInfo.InvariantCulture);
 
             if (sourceBalance == null || destinationBalance == null || sourceBalance < amount + transferFee)
             {
@@ -111,6 +119,26 @@ namespace BankRestApi.Services
             await _statementsRepository.Save(fromAccount, DateTime.UtcNow, "Transfer fee", -transferFee, sourceUpdatedBalance);
             await _statementsRepository.Save(toAccount, DateTime.UtcNow, "Transfer (from account " + fromAccount + ")", amount, destinationUpdatedBalance);
             _unitOfWork.Commit();
+        }
+
+        public async Task<IEnumerable<StatementEntry>> GetStatement(string accountNumber)
+        {
+            if (string.IsNullOrEmpty(accountNumber))
+                throw new ArgumentException("Account number cannot be null or empty.", nameof(accountNumber));
+
+            var result = (await _statementsRepository.Get(accountNumber))?.OrderBy(s => s.Date);
+
+            if (!result.Any())
+                throw new InvalidOperationException("Inexistent account.");
+
+            return result;
+        }
+
+        public async Task<IEnumerable<Account>> GetAccounts()
+        {
+            var result = (await _accountsRepository.GetAccounts()).OrderBy(acc => acc.AccountNumber);
+
+            return result;
         }
     }
 }
