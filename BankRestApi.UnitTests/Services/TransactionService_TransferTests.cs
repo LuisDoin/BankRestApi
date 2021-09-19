@@ -52,7 +52,7 @@ namespace BankRestApi.UnitTests.Services
         public void Transfer_InexistentSourceOrDestinationAccount_ThrowInvalidOperationException(string fromAccount, string toAccount)
         {
             _accountsRepository.Setup(rep => rep.GetBalance("a")).ReturnsAsync(value: null);
-            _accountsRepository.Setup(rep => rep.GetBalance("b")).ReturnsAsync(1);
+            _accountsRepository.Setup(rep => rep.GetBalance("b")).ReturnsAsync(2);
 
             Assert.That(() => _transactionService.Transfer(fromAccount, toAccount, 1), Throws.InvalidOperationException);
         }

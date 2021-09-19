@@ -105,7 +105,7 @@ namespace BankRestApi.Services
 
                 if(sourceBalance == null)
                     throw new InvalidOperationException("Source account inexistent.");
-                if (toAccount == null)
+                if (destinationBalance == null)
                     throw new InvalidOperationException("Destination account inexistent.");
                 else
                     throw new InvalidOperationException("insufficient funds.");

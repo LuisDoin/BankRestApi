@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace BankRestApi.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class AuthenticationController : Controller
     {
         private readonly ITokenService _tokenServices;
