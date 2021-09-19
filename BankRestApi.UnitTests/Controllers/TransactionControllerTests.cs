@@ -25,34 +25,9 @@ namespace BankRestApi.UnitTests.Controllers
             _transactionService = new Mock<ITransactionService>();
             _tokenService = new Mock<ITokenService>();
             _logger = new Mock<ILogger<TransactionController>>();
-            _transactionController = new TransactionController(_transactionService.Object, _logger.Object, _tokenService.Object);
+            _transactionController = new TransactionController(_transactionService.Object, _logger.Object);
         }
-
-        [Test]
-        public void Authenticate_InvalidUser_ReturnBadRequest()
-        {
-            _tokenService.Setup(ts => ts.GenerateToken(It.IsAny<User>())).Throws<InvalidOperationException>();
-
-            var result = _transactionController.Authenticate(new User()).Result.Result;
-            var BadRequestResult = result as BadRequestObjectResult;
-
-            Assert.IsNotNull(BadRequestResult);
-            Assert.AreEqual(400, BadRequestResult.StatusCode);
-        }
-
-        [Test]
-        public void Authenticate_ValidUser_ReturnOk()
-        {
-            var user = new User();
-
-            var result = _transactionController.Authenticate(user).Result.Result;
-            var okResult = result as OkObjectResult;
-
-            Assert.IsNotNull(okResult);
-            Assert.AreEqual(200, okResult.StatusCode);
-            _tokenService.Verify(ts => ts.GenerateToken(user));
-        }
-
+        
         [Test]
         public void Withdraw_InvalidParameters_ReturnBadRequest()
         {

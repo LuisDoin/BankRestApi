@@ -1,5 +1,4 @@
-﻿using BankRestApi.Data.Repositories;
-using BankRestApi.Models;
+﻿
 using BankRestApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,38 +13,13 @@ namespace BankRestApi.Controllers
     public class TransactionController : Controller
     {
         private readonly ITransactionService _transactionServices;
-        private readonly ITokenService _tokenServices;
         private readonly ILogger<TransactionController> _logger;
 
         public TransactionController(ITransactionService transactionServices,
-                                      ILogger<TransactionController> logger,
-                                      ITokenService tokenServices)
+                                      ILogger<TransactionController> logger)
         {
             _transactionServices = transactionServices;
             _logger = logger;
-            _tokenServices = tokenServices;
-        }
-
-        [HttpPost]
-        [Route("login")]
-        public async Task<ActionResult<dynamic>> Authenticate([FromBody] User user)
-        {
-            try
-            {
-                var token = await _tokenServices.GenerateToken(user);
-                user.Password = "";
-
-                return Ok(new { user, token });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Error message: " + ex.Message + " StackTrace: " + ex.StackTrace);
-                return StatusCode(500);
-            }            
         }
 
         [HttpPut("withdraw")]
