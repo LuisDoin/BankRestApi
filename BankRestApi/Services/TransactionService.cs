@@ -89,6 +89,8 @@ namespace BankRestApi.Services
                 throw new ArgumentException("Account number cannot be null or empty.", nameof(fromAccount)); 
             if (string.IsNullOrEmpty(toAccount))
                 throw new ArgumentException("Account number cannot be null or empty.", nameof(toAccount));
+            if (fromAccount.Equals(toAccount))
+                throw new ArgumentException("Source and destination accounts cannot be equal.", nameof(toAccount));
             if (amount <= 0)
                 throw new ArgumentException("Amount must be greater than zero", nameof(amount));
 

@@ -38,6 +38,7 @@ namespace BankRestApi.UnitTests.Services
         [TestCase(null, "a", 1)]
         [TestCase("a", "", 1)]
         [TestCase("a", null, 1)]
+        [TestCase("a", "a", 1)]
         [TestCase("a", "b", 0)]
         [TestCase("a", "b", -1)]
         public void Transfer_InvalidParameters_ThrowArgumentException(string fromAccount, string toAccount, decimal amount)
