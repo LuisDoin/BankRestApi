@@ -19,6 +19,15 @@ namespace BankRestApi.Controllers
             _logger = logger;
         }
 
+        /// <summary>        
+        /// </summary>
+        /// <returns> </returns>
+        /// <remarks>
+        /// 
+        /// login: user1 | password: password grants access to Transactions/statements and Transactions/accounts endpoints. login: user2 | password: password grans access to any Transactions/ endpoint.
+        /// 
+        /// </remarks>
+        /// <response code="200"></response>
         [HttpPost]
         [Route("login")]
         public async Task<ActionResult<dynamic>> Authenticate([FromBody] User user)

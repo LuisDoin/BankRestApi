@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BankRestApi</name>
+    </assembly>
+    <members>
+        <member name="M:BankRestApi.Controllers.AuthenticationController.Authenticate(BankRestApi.Models.User)">
+            <summary>        
+            </summary>
+            <returns> </returns>
+            <remarks>
+            
+            login: user1 | password: password grants access to Transactions/statements and Transactions/accounts endpoints. login: user2 | password: password grans access to any Transactions/ endpoint.
+            
+            </remarks>
+            <response code="200"></response>
+        </member>
+        <member name="M:BankRestApi.Controllers.TransactionController.Withdraw(System.String,System.Decimal)">
+            <summary>
+            Withdraws from a given existent account and returns the state of the account after the transaction.  
+            </summary>
+            <returns> The state of the account after the transaction</returns>
+            <remarks>
+            
+            A llist of the current existent accounts can be queried through the Transactions/accounts endpoint.      
+            
+            </remarks>
+            <response code="200">The state of the account after the transaction</response>
+        </member>
+        <member name="M:BankRestApi.Controllers.TransactionController.Deposit(System.String,System.Decimal)">
+            <summary>
+            Deposits to a given existent account.  
+            </summary>
+            <returns> </returns>
+            <remarks>
+            
+            A list of the current existent accounts can be queried through the Transactions/accounts endpoint.     
+            
+            </remarks>
+            <response code="200"></response>
+        </member>
+        <member name="M:BankRestApi.Controllers.TransactionController.Transfer(System.String,System.String,System.Decimal)">
+            <summary>
+            Transfer from a given existent account to another given existent account.  
+            </summary>
+            <returns> </returns>
+            <remarks>
+            
+            A list of the current existent accounts can be queried through the Transactions/accounts endpoint.       
+            
+            </remarks>
+            <response code="200"></response>
+        </member>
+        <member name="M:BankRestApi.Controllers.TransactionController.GetStatement(System.String)">
+            <summary>
+            Return the statement of a given existent account.  
+            </summary>
+            <returns> </returns>
+            <remarks>
+            
+            A list of the current existent accounts can be queried through the Transactions/accounts endpoint.      
+            
+            </remarks>
+            <response code="200"></response>
+        </member>
+        <member name="M:BankRestApi.Controllers.TransactionController.GetAccount">
+            <summary>
+            Returns a list of the current existent accounts.
+            </summary>
+            <returns> </returns>
+        </member>
+    </members>
+</doc>

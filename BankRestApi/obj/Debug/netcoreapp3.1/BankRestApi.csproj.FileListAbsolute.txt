@@ -57,3 +57,4 @@ C:\Users\luisd\source\repos\BankRestApi\BankRestApi\bin\Debug\netcoreapp3.1\runt
 C:\Users\luisd\source\repos\BankRestApi\BankRestApi\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Security.Principal.Windows.dll
 C:\Users\luisd\source\repos\BankRestApi\BankRestApi\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Security.Principal.Windows.dll
 C:\Users\luisd\source\repos\BankRestApi\BankRestApi\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
+C:\Users\luisd\source\repos\BankRestApi\BankRestApi\bin\Debug\netcoreapp3.1\BankRestApi.xml

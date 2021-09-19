@@ -22,6 +22,16 @@ namespace BankRestApi.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Withdraws from a given existent account and returns the state of the account after the transaction.  
+        /// </summary>
+        /// <returns> The state of the account after the transaction</returns>
+        /// <remarks>
+        /// 
+        /// A llist of the current existent accounts can be queried through the Transactions/accounts endpoint.      
+        /// 
+        /// </remarks>
+        /// <response code="200">The state of the account after the transaction</response>
         [HttpPut("withdraw")]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "tier2")]
         public async Task<IActionResult> Withdraw(string accountNumber, decimal amount)
@@ -41,6 +51,16 @@ namespace BankRestApi.Controllers
             } 
         }
 
+        /// <summary>
+        /// Deposits to a given existent account.  
+        /// </summary>
+        /// <returns> </returns>
+        /// <remarks>
+        /// 
+        /// A list of the current existent accounts can be queried through the Transactions/accounts endpoint.     
+        /// 
+        /// </remarks>
+        /// <response code="200"></response>
         [HttpPut("deposit")]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "tier2")]
         public async Task<IActionResult> Deposit(string accountNumber, decimal amount)
@@ -61,6 +81,16 @@ namespace BankRestApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Transfer from a given existent account to another given existent account.  
+        /// </summary>
+        /// <returns> </returns>
+        /// <remarks>
+        /// 
+        /// A list of the current existent accounts can be queried through the Transactions/accounts endpoint.       
+        /// 
+        /// </remarks>
+        /// <response code="200"></response>
         [HttpPut("transfer")]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "tier2")]
         public async Task<IActionResult> Transfer(string fromAccount, string toAccount, decimal amount)
@@ -81,6 +111,16 @@ namespace BankRestApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Return the statement of a given existent account.  
+        /// </summary>
+        /// <returns> </returns>
+        /// <remarks>
+        /// 
+        /// A list of the current existent accounts can be queried through the Transactions/accounts endpoint.      
+        /// 
+        /// </remarks>
+        /// <response code="200"></response>
         [HttpGet("statement")]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "tier1,tier2")]
         public async Task<IActionResult> GetStatement(string accountNumber)
@@ -100,6 +140,11 @@ namespace BankRestApi.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Returns a list of the current existent accounts.
+        /// </summary>
+        /// <returns> </returns>
         [HttpGet("accounts")]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "tier1,tier2")]
         public async Task<IActionResult> GetAccount()
