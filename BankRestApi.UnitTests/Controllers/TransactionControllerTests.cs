@@ -44,13 +44,13 @@ namespace BankRestApi.UnitTests.Controllers
         public void Authenticate_ValidUser_ReturnOk()
         {
             var user = new User();
-            _tokenService.Setup(ts => ts.GenerateToken(It.IsAny<User>())).ReturnsAsync("token");
 
-            var result = _transactionController.Authenticate(new User()).Result.Result;
+            var result = _transactionController.Authenticate(user).Result.Result;
             var okResult = result as OkObjectResult;
 
             Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
+            _tokenService.Verify(ts => ts.GenerateToken(user));
         }
 
         [Test]
@@ -80,13 +80,12 @@ namespace BankRestApi.UnitTests.Controllers
         [Test]
         public void Withdraw_ValidOperation_ReturnOk()
         {
-            _transactionService.Setup(ts => ts.Withdraw("a", 1)).ReturnsAsync(new Account());
-
             var result = _transactionController.Withdraw("a", 1).Result;
             var okResult = result as OkObjectResult;
-
+            
             Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
+            _transactionService.Verify(ts => ts.Withdraw("a", 1));
         }
 
         [Test]
@@ -118,7 +117,9 @@ namespace BankRestApi.UnitTests.Controllers
         {
             var actionResult = _transactionController.Deposit("a", 1).Result;
             var statusCodeResult = (IStatusCodeActionResult)actionResult;
+
             Assert.AreEqual(200, statusCodeResult.StatusCode);
+            _transactionService.Verify(ts => ts.Deposit("a", 1));
         }
 
         [Test]
@@ -154,7 +155,9 @@ namespace BankRestApi.UnitTests.Controllers
         {
             var actionResult = _transactionController.Transfer("a", "b", 1).Result;
             var statusCodeResult = (IStatusCodeActionResult)actionResult;
+
             Assert.AreEqual(200, statusCodeResult.StatusCode);
+            _transactionService.Verify(ts => ts.Transfer("a", "b", 1));
         }
 
         [Test]
@@ -184,13 +187,12 @@ namespace BankRestApi.UnitTests.Controllers
         [Test]
         public void GetStatement_ValidOperation_ReturnOk()
         {
-            _transactionService.Setup(ts => ts.GetStatement("a")).ReturnsAsync(new List<StatementEntry> { new StatementEntry()});
-
             var result = _transactionController.GetStatement("a").Result;
             var okResult = result as OkObjectResult;
 
             Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
+            _transactionService.Verify(ts => ts.GetStatement("a"));
         }
 
         [Test]
