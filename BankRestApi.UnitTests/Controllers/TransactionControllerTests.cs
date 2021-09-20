@@ -34,10 +34,10 @@ namespace BankRestApi.UnitTests.Controllers
             _transactionService.Setup(ts => ts.Withdraw(It.IsAny<string>(), It.IsAny<decimal>())).Throws<ArgumentException>();
 
             var result = _transactionController.Withdraw("a", 1).Result;
-            var BadRequestResult = result as BadRequestObjectResult;
+            var badRequestResult = result as BadRequestObjectResult;
 
-            Assert.IsNotNull(BadRequestResult);
-            Assert.AreEqual(400, BadRequestResult.StatusCode);
+            Assert.IsNotNull(badRequestResult);
+            Assert.AreEqual(400, badRequestResult.StatusCode);
         }
 
         [Test]
@@ -46,10 +46,10 @@ namespace BankRestApi.UnitTests.Controllers
             _transactionService.Setup(ts => ts.Withdraw(It.IsAny<string>(), It.IsAny<decimal>())).Throws<InvalidOperationException>();
 
             var result = _transactionController.Withdraw("a", 1).Result;
-            var BadRequestResult = result as BadRequestObjectResult;
+            var badRequestResult = result as BadRequestObjectResult;
 
-            Assert.IsNotNull(BadRequestResult);
-            Assert.AreEqual(400, BadRequestResult.StatusCode);
+            Assert.IsNotNull(badRequestResult);
+            Assert.AreEqual(400, badRequestResult.StatusCode);
         }
 
         [Test]
@@ -69,10 +69,10 @@ namespace BankRestApi.UnitTests.Controllers
             _transactionService.Setup(ts => ts.Deposit(It.IsAny<string>(), It.IsAny<decimal>())).Throws<ArgumentException>();
 
             var result = _transactionController.Deposit("a", 1).Result;
-            var BadRequestResult = result as BadRequestObjectResult;
+            var badRequestResult = result as BadRequestObjectResult;
 
-            Assert.IsNotNull(BadRequestResult);
-            Assert.AreEqual(400, BadRequestResult.StatusCode);
+            Assert.IsNotNull(badRequestResult);
+            Assert.AreEqual(400, badRequestResult.StatusCode);
         }
 
         [Test]
@@ -81,10 +81,10 @@ namespace BankRestApi.UnitTests.Controllers
             _transactionService.Setup(ts => ts.Deposit(It.IsAny<string>(), It.IsAny<decimal>())).Throws<InvalidOperationException>();
 
             var result = _transactionController.Deposit("a", 1).Result;
-            var BadRequestResult = result as BadRequestObjectResult;
+            var badRequestResult = result as BadRequestObjectResult;
 
-            Assert.IsNotNull(BadRequestResult);
-            Assert.AreEqual(400, BadRequestResult.StatusCode);
+            Assert.IsNotNull(badRequestResult);
+            Assert.AreEqual(400, badRequestResult.StatusCode);
         }
 
         [Test]
@@ -105,10 +105,10 @@ namespace BankRestApi.UnitTests.Controllers
                 .Throws<ArgumentException>();
 
             var result = _transactionController.Transfer("a", "b", 1).Result;
-            var BadRequestResult = result as BadRequestObjectResult;
+            var badRequestResult = result as BadRequestObjectResult;
 
-            Assert.IsNotNull(BadRequestResult);
-            Assert.AreEqual(400, BadRequestResult.StatusCode);
+            Assert.IsNotNull(badRequestResult);
+            Assert.AreEqual(400, badRequestResult.StatusCode);
         }
 
         [Test]
@@ -119,10 +119,10 @@ namespace BankRestApi.UnitTests.Controllers
                 .Throws<InvalidOperationException>();
 
             var result = _transactionController.Transfer("a", "b", 1).Result;
-            var BadRequestResult = result as BadRequestObjectResult;
+            var badRequestResult = result as BadRequestObjectResult;
 
-            Assert.IsNotNull(BadRequestResult);
-            Assert.AreEqual(400, BadRequestResult.StatusCode);
+            Assert.IsNotNull(badRequestResult);
+            Assert.AreEqual(400, badRequestResult.StatusCode);
         }
 
         [Test]
@@ -141,10 +141,10 @@ namespace BankRestApi.UnitTests.Controllers
             _transactionService.Setup(ts => ts.GetStatement(It.IsAny<string>())).Throws<ArgumentException>();
 
             var result = _transactionController.GetStatement("a").Result;
-            var BadRequestResult = result as BadRequestObjectResult;
+            var badRequestResult = result as BadRequestObjectResult;
 
-            Assert.IsNotNull(BadRequestResult);
-            Assert.AreEqual(400, BadRequestResult.StatusCode);
+            Assert.IsNotNull(badRequestResult);
+            Assert.AreEqual(400, badRequestResult.StatusCode);
         }
 
         [Test]
@@ -153,10 +153,10 @@ namespace BankRestApi.UnitTests.Controllers
             _transactionService.Setup(ts => ts.GetStatement(It.IsAny<string>())).Throws<InvalidOperationException>();
 
             var result = _transactionController.GetStatement("a").Result;
-            var BadRequestResult = result as BadRequestObjectResult;
+            var badRequestResult = result as BadRequestObjectResult;
 
-            Assert.IsNotNull(BadRequestResult);
-            Assert.AreEqual(400, BadRequestResult.StatusCode);
+            Assert.IsNotNull(badRequestResult);
+            Assert.AreEqual(400, badRequestResult.StatusCode);
         }
 
         [Test]

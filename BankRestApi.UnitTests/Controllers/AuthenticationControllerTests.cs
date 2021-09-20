@@ -32,10 +32,10 @@ namespace BankRestApi.UnitTests.Controllers
             _tokenService.Setup(ts => ts.GenerateToken(It.IsAny<User>())).Throws<InvalidOperationException>();
 
             var result = _transactionController.Authenticate(new User()).Result.Result;
-            var BadRequestResult = result as BadRequestObjectResult;
+            var badRequestResult = result as BadRequestObjectResult;
 
-            Assert.IsNotNull(BadRequestResult);
-            Assert.AreEqual(400, BadRequestResult.StatusCode);
+            Assert.IsNotNull(badRequestResult);
+            Assert.AreEqual(400, badRequestResult.StatusCode);
         }
 
         [Test]

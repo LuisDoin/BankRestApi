@@ -30,10 +30,8 @@ namespace BankRestApi.Services
 
         public async Task<Account> Withdraw(string accountNumber, decimal amount)
         {
-          if (string.IsNullOrEmpty(accountNumber))
-              throw new ArgumentException("Account number cannot be null or empty.", nameof(accountNumber));
-          if (amount <= 0)
-              throw new ArgumentException("Amount must be greater than zero", nameof(amount));
+            if (string.IsNullOrEmpty(accountNumber) || amount <= 0)
+                throw new ArgumentException(getArgumentExceptionErrorMessage(accountNumber, "default", amount)); 
             
             _unitOfWork.BeginTransaction();
             var balance = await _accountsRepository.GetBalance(accountNumber);
@@ -42,10 +40,7 @@ namespace BankRestApi.Services
             if (balance == null || balance < amount + withdrawalFee)
             {
                 _unitOfWork.Rollback();
-                if (balance == null)
-                    throw new InvalidOperationException("Inexistent account.");
-                else
-                    throw new InvalidOperationException("insufficient funds.");
+                throw new InvalidOperationException(getOperationExceptionErrorMessage(balance, 1, amount + withdrawalFee));
             }  
 
             var updatedBalance = (decimal)balance - (amount + withdrawalFee);
@@ -60,10 +55,9 @@ namespace BankRestApi.Services
 
         public async Task Deposit(string accountNumber, decimal amount)
         {
-            if (string.IsNullOrEmpty(accountNumber))
-                throw new ArgumentException("Account number cannot be null or empty.", nameof(accountNumber));
-            if (amount <= 0)
-                throw new ArgumentException("Amount must be greater than zero", nameof(amount));
+            if (string.IsNullOrEmpty(accountNumber) || amount <= 0)
+                throw new ArgumentException(getArgumentExceptionErrorMessage(accountNumber, "default", amount));
+            
 
             _unitOfWork.BeginTransaction();
             var balance = await _accountsRepository.GetBalance(accountNumber);
@@ -71,7 +65,7 @@ namespace BankRestApi.Services
             if (balance == null)
             {
                 _unitOfWork.Rollback();
-                throw new InvalidOperationException("Inexistent account.");
+                throw new InvalidOperationException(getOperationExceptionErrorMessage(balance, 1, 1));
             }
 
             var depositPercentageFee = Decimal.Parse(_config.GetSection("DepositPercentageFee").Value, CultureInfo.InvariantCulture);
@@ -85,14 +79,9 @@ namespace BankRestApi.Services
 
         public async Task Transfer(string fromAccount, string toAccount, decimal amount)
         {
-            if (string.IsNullOrEmpty(fromAccount))
-                throw new ArgumentException("Account number cannot be null or empty.", nameof(fromAccount)); 
-            if (string.IsNullOrEmpty(toAccount))
-                throw new ArgumentException("Account number cannot be null or empty.", nameof(toAccount));
-            if (fromAccount.Equals(toAccount))
-                throw new ArgumentException("Source and destination accounts cannot be equal.", nameof(toAccount));
-            if (amount <= 0)
-                throw new ArgumentException("Amount must be greater than zero", nameof(amount));
+            if(string.IsNullOrEmpty(fromAccount) || string.IsNullOrEmpty(toAccount) || fromAccount.Equals(toAccount) || amount <= 0)
+                throw new ArgumentException(getArgumentExceptionErrorMessage(fromAccount, toAccount, amount));
+            
 
             _unitOfWork.BeginTransaction();
             var sourceBalance = await _accountsRepository.GetBalance(fromAccount);
@@ -102,13 +91,7 @@ namespace BankRestApi.Services
             if (sourceBalance == null || destinationBalance == null || sourceBalance < amount + transferFee)
             {
                 _unitOfWork.Rollback();
-
-                if(sourceBalance == null)
-                    throw new InvalidOperationException("Source account inexistent.");
-                if (destinationBalance == null)
-                    throw new InvalidOperationException("Destination account inexistent.");
-                else
-                    throw new InvalidOperationException("insufficient funds.");
+                throw new InvalidOperationException(getOperationExceptionErrorMessage(sourceBalance, destinationBalance, amount + transferFee));
             }
 
             var sourceUpdatedBalance = (decimal)sourceBalance - amount - transferFee; 
@@ -125,12 +108,12 @@ namespace BankRestApi.Services
         public async Task<IEnumerable<StatementEntry>> GetStatement(string accountNumber)
         {
             if (string.IsNullOrEmpty(accountNumber))
-                throw new ArgumentException("Account number cannot be null or empty.", nameof(accountNumber));
+                throw new ArgumentException(getArgumentExceptionErrorMessage(accountNumber, "default", 1));
 
             var result = (await _statementsRepository.Get(accountNumber))?.OrderBy(s => s.Date);
 
             if (!result.Any())
-                throw new InvalidOperationException("Inexistent account.");
+                throw new InvalidOperationException(getOperationExceptionErrorMessage(null, null, null));
 
             return result;
         }
@@ -140,6 +123,29 @@ namespace BankRestApi.Services
             var result = (await _accountsRepository.GetAccounts()).OrderBy(acc => acc.AccountNumber);
 
             return result;
+        }
+
+        private string getArgumentExceptionErrorMessage(string fromAccount, string toAccount, decimal? amount)
+        {
+            if (string.IsNullOrEmpty(fromAccount) || string.IsNullOrEmpty(toAccount))
+                return "Account number cannot be null or empty.";
+            if (fromAccount.Equals(toAccount))
+                return "Source and destination accounts cannot be equal.";
+            if (amount <= 0)
+                return "Amount must be greater than zero";
+
+            return "";
+        }
+        private string getOperationExceptionErrorMessage(decimal? sourceAmount, decimal? destinationAmount, decimal? minBalanceRequired)
+        {
+            if (sourceAmount == null)
+                return "Source account inexistent.";
+            if (destinationAmount == null)
+                return "Destination account inexistent.";
+            if (sourceAmount < minBalanceRequired)
+                return "Insufficient funds.";
+
+            return "";
         }
     }
 }
